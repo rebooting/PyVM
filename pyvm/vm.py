@@ -38,6 +38,8 @@ class ToyVM:
             4: self.mov,
 
         }
+        # loops till it hits HLT, if it runs out of program code, it will stop anyway and 
+        # print an error message
         while self.ipc < self.program_end:
             instr = self.memory[self.ipc]
             print(f" inst:{instr}")
@@ -56,7 +58,9 @@ class ToyVM:
                 ok = self.inc_ipc()
                 if not ok:
                     print ("execute error next")
-
+                    return False
+        print("out of program code")
+        return False
 
 
     def no_op(self):
