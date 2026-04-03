@@ -1,0 +1,24 @@
+[project]
+name = "pyvm"
+version = "0.1.0"
+description = "A Python-based toy virtual machine implementation"
+readme = "Readme.md"
+requires-python = ">=3.8"
+license = { text = "MIT" }
+authors = [ { name = "ALvin", email = "@ google mail" } ]
+dependencies = []
+
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = "-ra -q"
+testpaths = ["tests"]
+
+[tool.black]
+line-length = 88
+
+[tool.isort]
+profile = "black"
