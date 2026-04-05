@@ -12,7 +12,8 @@ class ToyVM:
         self.register = {
             "R0": 0,
             "R1": 0,
-            "SP": TOP_OF_STACK_LOCATION
+            "SP": TOP_OF_STACK_LOCATION,
+            "CP": 0
         }
         self.program_end = 0 # for ensuring that stack does not overwrite CS
     
@@ -22,10 +23,10 @@ class ToyVM:
         if len(program)< MEMORY_SIZE:
             # deep copy
             self.memory[:len(program) ] = program
-            self.ipc = 0
             self.program_end = len(program)
             self.stack = []
             self.register["SP"] = TOP_OF_STACK_LOCATION
+            self.register['CP'] = 0
         else:
             print("insufficient memory")
 
@@ -40,8 +41,8 @@ class ToyVM:
         }
         # loops till it hits HLT, if it runs out of program code, it will stop anyway and 
         # print an error message
-        while self.ipc < self.program_end:
-            instr = self.memory[self.ipc]
+        while self.register['CP'] < self.program_end:
+            instr = self.memory[self.register['CP']]
             print(f" inst:{instr}")
             if instr == 99:
                 print('halted')
@@ -88,7 +89,7 @@ class ToyVM:
     def print(self):
         ret = self.inc_ipc()
         if ret == True:
-            reg = self.memory[self.ipc]
+            reg = self.memory[self.register['CP']]
 
             if reg == 0:
                 print(f"{self.register['R0']}")
@@ -104,13 +105,13 @@ class ToyVM:
     def mov(self)->bool:
         ret = self.inc_ipc()
         if ret == True:
-            reg = self.memory[self.ipc]
+            reg = self.memory[self.register['CP']]
         else:
             print ("error, outside program code")
             return False
         ret = self.inc_ipc()
         if ret == True:
-           val = self.memory[self.ipc]
+           val = self.memory[self.register['CP']]
         else:
             print ("error, outside program code")
             return False
@@ -125,8 +126,8 @@ class ToyVM:
         return True
 
     def inc_ipc(self)-> bool:
-        if self.ipc < self.program_end:
-            self.ipc = self.ipc + 1
+        if self.register['CP'] < self.program_end:
+            self.register['CP'] = self.register['CP'] + 1
             return True
         else:
             return False
